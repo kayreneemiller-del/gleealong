@@ -1,5 +1,5 @@
-# season.episode | title | verify note (blank = fairly confident)
-# Written from memory with no network access to a reference source. Rows with a note need a human check.
+# season.episode | title | verify note (blank = verified)
+# Source: Wikipedia "List of Glee episodes" (oldid=1369902942), 121 episodes: 22/22/22/22/20/13.
 1.1|Pilot|
 1.2|Showmance|
 1.3|Acafellas|
@@ -21,7 +21,7 @@
 1.19|Dream On|
 1.20|Theatricality|
 1.21|Funk|
-1.22|Journey|
+1.22|Journey to Regionals|
 2.1|Audition|
 2.2|Britney/Brittany|
 2.3|Grilled Cheesus|
@@ -51,73 +51,73 @@
 3.5|The First Time|
 3.6|Mash Off|
 3.7|I Kissed a Girl|
-3.8|Hold on to Sixteen|
+3.8|Hold On to Sixteen|
 3.9|Extraordinary Merry Christmas|
-3.10|Yes/No|order unverified
-3.11|Michael|order unverified
-3.12|The Spanish Teacher|order unverified
-3.13|Heart|order unverified
-3.14|On My Way|order unverified
-3.15|Big Brother|order unverified
-3.16|Saturday Night Glee-ver|order unverified
-3.17|Dance with Somebody|order unverified
-3.18|Prom-asaurus|order unverified
-3.19|Props|order unverified
-3.20|Nationals|order unverified
-3.21|Choke|order unverified
-3.22|Goodbye|order unverified
+3.10|Yes/No|
+3.11|Michael|
+3.12|The Spanish Teacher|
+3.13|Heart|
+3.14|On My Way|
+3.15|Big Brother|
+3.16|Saturday Night Glee-ver|
+3.17|Dance with Somebody|
+3.18|Choke|
+3.19|Prom-asaurus|
+3.20|Props|
+3.21|Nationals|
+3.22|Goodbye|
 4.1|The New Rachel|
-4.2|Britney 2.0|order unverified
-4.3|Makeover|order unverified
-4.4|The Role You Were Born to Play|order unverified
-4.5|Glease|order unverified
-4.6|Dynamic Duets|order unverified
-4.7|Thanksgiving|order unverified
-4.8|Swan Song|order unverified
-4.9|Glee, Actually|order unverified
-4.10|Diva|order unverified
-4.11|I Do|order unverified
-4.12|Sadie Hawkins|order unverified
-4.13|Naked|order unverified
-4.14|Girls (and Boys) on Film|order unverified
-4.15|Guilty Pleasures|order unverified
-4.16|Shooting Star|order unverified
-4.17|Sweet Dreams|order unverified
-4.18|Lights Out|order unverified
-4.19|The Break-Up|title and order unverified
-4.20|Wonder-ful|order unverified
-4.21|Season 4, Episode 21 (title TBD)|TBD - could not recall
-4.22|All or Nothing|order unverified
+4.2|Britney 2.0|
+4.3|Makeover|
+4.4|The Break Up|
+4.5|The Role You Were Born to Play|
+4.6|Glease|
+4.7|Dynamic Duets|
+4.8|Thanksgiving|
+4.9|Swan Song|
+4.10|Glee, Actually|
+4.11|Sadie Hawkins|
+4.12|Naked|
+4.13|Diva|
+4.14|I Do|
+4.15|Girls (and Boys) On Film|
+4.16|Feud|
+4.17|Guilty Pleasures|
+4.18|Shooting Star|
+4.19|Sweet Dreams|
+4.20|Lights Out|
+4.21|Wonder-ful|
+4.22|All or Nothing|
 5.1|Love, Love, Love|
-5.2|Tina in the Sky with Diamonds|order unverified
-5.3|The Quarterback|order unverified
-5.4|A Katy or a Gaga|order unverified
-5.5|The End of Twerk|order unverified
-5.6|Movin' Out|order unverified
-5.7|Puppet Master|order unverified
-5.8|Previously Unaired Christmas|order unverified
-5.9|Frenemies|order unverified
-5.10|Trio|order unverified
-5.11|City of Angels|order unverified
-5.12|Bash|order unverified
-5.13|100|order unverified
-5.14|Opening Night|title and order unverified
-5.15|New Directions|title and order unverified
-5.16|Season 5, Episode 16 (title TBD)|TBD - could not recall
-5.17|Season 5, Episode 17 (title TBD)|TBD - could not recall
-5.18|Season 5, Episode 18 (title TBD)|TBD - could not recall
-5.19|Season 5, Episode 19 (title TBD)|TBD - could not recall
-5.20|Season 5, Episode 20 (title TBD)|TBD - could not recall
+5.2|Tina in the Sky with Diamonds|
+5.3|The Quarterback|
+5.4|A Katy or a Gaga|
+5.5|The End of Twerk|
+5.6|Movin' Out|
+5.7|Puppet Master|
+5.8|Previously Unaired Christmas|
+5.9|Frenemies|
+5.10|Trio|
+5.11|City of Angels|
+5.12|100|
+5.13|New Directions|
+5.14|New New York|
+5.15|Bash|
+5.16|Tested|
+5.17|Opening Night|
+5.18|The Back-Up Plan|
+5.19|Old Dog, New Tricks|
+5.20|The Untitled Rachel Berry Project|
 6.1|Loser Like Me|
-6.2|Homecoming|order unverified
-6.3|Jagged Little Tapestry|order unverified
-6.4|The Hurt Locker, Part 1|order unverified
-6.5|The Hurt Locker, Part 2|order unverified
-6.6|What the World Needs Now|order unverified
-6.7|Child Star|order unverified
-6.8|Transitioning|order unverified
-6.9|A Wedding|order unverified
-6.10|The Rise and Fall of Sue Sylvester|order unverified
-6.11|2009|order unverified
-6.12|Dreams Come True (Part 1)|order unverified
-6.13|Dreams Come True|order unverified
+6.2|Homecoming|
+6.3|Jagged Little Tapestry|
+6.4|The Hurt Locker, Part One|
+6.5|The Hurt Locker, Part Two|
+6.6|What the World Needs Now|
+6.7|Transitioning|
+6.8|A Wedding|
+6.9|Child Star|
+6.10|The Rise and Fall of Sue Sylvester|
+6.11|We Built This Glee Club|
+6.12|2009|
+6.13|Dreams Come True|
