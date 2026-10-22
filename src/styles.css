@@ -81,3 +81,14 @@ section h3, .who { margin: 12px 0 8px; font-size: 1rem; }
 .sync-offline, .sync-error { color: var(--err); font-weight: 600; } .sync-saved { color: var(--ok); }
 .submit { margin-top: 4px; }
 hr { border: 0; border-top: 2px dashed var(--line); width: 100%; }
+
+/* ---- stats ---- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 16px 14px; }
+.card h3 { margin: 12px 0 6px; } .card p { margin: 6px 0; } .small { font-size: .8rem; }
+.seasons.seven { grid-template-columns: repeat(7, 1fr); }
+.avgs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.avgs div { background: var(--bg); border-radius: 12px; padding: 8px 10px; }
+.avgs dt { font-size: .72rem; color: var(--muted); } .avgs dd { margin: 0; font: 800 1.5rem ui-monospace, monospace; color: var(--brand); }
+.tallies { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; }
+.dis { padding-left: 20px; margin: 0; display: grid; gap: 12px; } .dis li { display: grid; gap: 2px; }
+.gap { color: var(--accent); font-weight: 700; font-size: .85rem; }

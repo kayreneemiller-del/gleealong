@@ -10,7 +10,8 @@
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
     "test:rls": "bash scripts/with-test-pg.sh",
-    "gen:episodes": "node scripts/gen-episodes.mjs"
+    "gen:episodes": "node scripts/gen-episodes.mjs",
+    "test:live": "vitest run tests/live"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
