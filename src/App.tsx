@@ -4,6 +4,8 @@ import { useSession } from './lib/session'
 import AuthPage from './pages/AuthPage'
 import PairPage from './pages/PairPage'
 import HomePage from './pages/HomePage'
+import EpisodePage from './pages/EpisodePage'
+import Shell from './components/Shell'
 
 function Splash({ children }: { children: React.ReactNode }) {
   return <main className="splash"><div className="logo">G</div><p>{children}</p></main>
@@ -26,7 +28,10 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/*" element={<HomePage />} />
+      <Route element={<Shell />}>
+        <Route index element={<HomePage />} />
+        <Route path="ep/:id" element={<EpisodePage />} />
+      </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

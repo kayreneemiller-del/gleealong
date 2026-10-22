@@ -32,5 +32,6 @@ export default defineConfig({
   ],
   test: {
     include: ['tests/**/*.test.ts'],
+    fileParallelism: false, // DB tests share one Postgres cluster (roles are cluster-global)
   },
 })
