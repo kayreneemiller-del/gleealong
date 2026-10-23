@@ -126,7 +126,7 @@ export default function EpisodePage() {
           {theirs ? (
             <>
               <hr />
-              <h3 className="who">{partner?.display_name} ✨ revealed</h3>
+              <h3 className="who who-partner">{partner?.display_name} ✨ revealed</h3>
               <ReviewFields content={theirs.content} />
             </>
           ) : (
