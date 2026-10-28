@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  // Expose VITE_* and the NEXT_PUBLIC_* vars that Vercel's Supabase integration creates.
+  // NEVER add 'SUPABASE_' or 'POSTGRES_' here: those hold the secret key and DB password.
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
   plugins: [
     react(),
     VitePWA({
