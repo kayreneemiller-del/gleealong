@@ -19,7 +19,7 @@ export default function App() {
     return (
       <Splash>
         Supabase isn't wired up yet. Copy <code>.env.example</code> to <code>.env.local</code> and fill in
-        your project URL and anon key. The show must go on!
+        your project URL and key (<code>VITE_SUPABASE_URL</code>, <code>VITE_SUPABASE_KEY</code>). The show must go on!
       </Splash>
     )
   }
