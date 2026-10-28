@@ -5,7 +5,7 @@ A private two-person Glee rewatch app. React + Vite + TypeScript PWA, Supabase (
 ## Setup
 1. Create a Supabase project. In the SQL editor (or `supabase db push`), run `supabase/migrations/*.sql` in order, then `supabase/seed.sql`.
 2. Auth → Providers → Email. For a two-person app, turn **off** "Confirm email" (or the sign-up flow will ask you to confirm first).
-3. `cp .env.example .env.local` and fill in the project URL + anon key.
+3. `cp .env.example .env.local` and fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_KEY` (the publishable key, `sb_publishable_...`, from Project Settings → API Keys). Older names `VITE_SUPABASE_PUBLISHABLE_KEY` / `VITE_SUPABASE_ANON_KEY` also work. The secret key never goes in the app.
 4. `npm i && npm run dev`
 5. Vercel: import the repo, set the same two `VITE_` env vars. `vercel.json` handles SPA routing.
 
@@ -25,7 +25,7 @@ Known by-design property: anyone can unlock the reveal by submitting. Submit req
 ## Tests
 - `npm test`: unit tests (draft autosave engine). DB tests are skipped unless a database is available.
 - `npm run test:rls`: spins up a throwaway local Postgres (no Docker needed), applies a small Supabase shim + all migrations + seed, and runs the leak tests. Each probe runs as PostgREST does: `SET ROLE authenticated` plus the caller's JWT claims, with RLS enforced. Set `TEST_DATABASE_URL` to use your own server.
-- `npm run test:live`: **opt-in** end-to-end check against a real Supabase project over the real REST API (two real users, created and deleted). Needs `LIVE_SUPABASE_URL`, `LIVE_SUPABASE_ANON_KEY`, `LIVE_SUPABASE_SERVICE_ROLE_KEY`. Use a staging project.
+- `npm run test:live`: **opt-in** end-to-end check against a real Supabase project over the real REST API (two real users, created and deleted). Needs `LIVE_SUPABASE_URL`, `LIVE_SUPABASE_KEY` (publishable) and `LIVE_SUPABASE_SECRET` (secret key; run it on your own machine only). Use a staging project.
 
 ## Episode list
 All 121 episodes (22/22/22/22/20/13) come from Wikipedia's "List of Glee episodes" and are numbered by in-season episode. `verify_note` support remains in the schema and UI (a ⚠️ shows on any row with a note) in case you want to flag something. To change the list: edit `data/episodes.txt`, `npm run gen:episodes`, then re-run `supabase/seed.sql` (idempotent upsert).

@@ -1,14 +1,16 @@
 /**
  * Opt-in end-to-end leak check against a REAL Supabase project, over the real REST API (PostgREST),
  * with two real signed-in users. Skipped unless these are set:
- *   LIVE_SUPABASE_URL, LIVE_SUPABASE_ANON_KEY, LIVE_SUPABASE_SERVICE_ROLE_KEY
+ *   LIVE_SUPABASE_URL, LIVE_SUPABASE_KEY (publishable), LIVE_SUPABASE_SECRET (secret key)
  * Use a throwaway/staging project: it creates and then deletes two users (and their pair/reviews).
  * Run: npm run test:live
  */
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const { LIVE_SUPABASE_URL: URL_, LIVE_SUPABASE_ANON_KEY: ANON, LIVE_SUPABASE_SERVICE_ROLE_KEY: SERVICE } = process.env
+const { LIVE_SUPABASE_URL: URL_, LIVE_SUPABASE_KEY, LIVE_SUPABASE_ANON_KEY, LIVE_SUPABASE_SECRET, LIVE_SUPABASE_SERVICE_ROLE_KEY } = process.env
+const ANON = LIVE_SUPABASE_KEY ?? LIVE_SUPABASE_ANON_KEY
+const SERVICE = LIVE_SUPABASE_SECRET ?? LIVE_SUPABASE_SERVICE_ROLE_KEY
 const enabled = Boolean(URL_ && ANON && SERVICE)
 
 const body = (notes: string) => ({
