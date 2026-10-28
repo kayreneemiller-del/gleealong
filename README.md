@@ -5,7 +5,7 @@ A private two-person Glee rewatch app. React + Vite + TypeScript PWA, Supabase (
 ## Setup
 1. Create a Supabase project. In the SQL editor (or `supabase db push`), run `supabase/migrations/*.sql` in order, then `supabase/seed.sql`.
 2. Auth → Providers → Email. For a two-person app, turn **off** "Confirm email" (or the sign-up flow will ask you to confirm first).
-3. `cp .env.example .env.local` and fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_KEY` (the publishable key, `sb_publishable_...`, from Project Settings → API Keys). Older names `VITE_SUPABASE_PUBLISHABLE_KEY` / `VITE_SUPABASE_ANON_KEY` also work. The secret key never goes in the app.
+3. `cp .env.example .env.local` and fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_KEY` (the publishable key, `sb_publishable_...`, from Project Settings → API Keys). Older names `VITE_SUPABASE_PUBLISHABLE_KEY` / `VITE_SUPABASE_ANON_KEY` also work. The secret key never goes in the app. On Vercel with the Supabase integration, the `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` variables it creates are picked up automatically (`envPrefix` in `vite.config.ts` allows only `VITE_` and `NEXT_PUBLIC_`; never add `SUPABASE_` or `POSTGRES_`).
 4. `npm i && npm run dev`
 5. Vercel: import the repo, set the same two `VITE_` env vars. `vercel.json` handles SPA routing.
 
