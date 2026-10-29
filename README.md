@@ -10,7 +10,7 @@ A private two-person Glee rewatch app. React + Vite + TypeScript PWA, Supabase (
 5. Vercel: import the repo, set the same two `VITE_` env vars. `vercel.json` handles SPA routing.
 
 ## Pairing
-One person signs up, picks "Start a club", and shares the 8-character code. The other picks "I have a code". A pair holds exactly two people.
+One person signs up, picks "Start a club", and shares the 8-character code. Everyone else picks "I have a code". A club holds up to three people (`pair_max_size()` in `supabase/migrations/0004_*.sql`).
 
 ## Episodes
 `data/episodes.txt` is the source; `npm run gen:episodes` regenerates `supabase/seed.sql` (idempotent upserts). Rows with a `verify_note` need a human check. **See "Episode list" below.**
@@ -32,3 +32,8 @@ All 121 episodes (22/22/22/22/20/13) come from Wikipedia's "List of Glee episode
 
 ## PWA / mobile
 Installable (manifest + service worker via vite-plugin-pwa), safe-area padding, 48px tap targets, dark mode, tap counters with undo. Supabase API calls are never cached by the service worker; offline resilience for drafts is the app's own local-first sync (see `src/lib/draftSync.ts`): edits persist to local storage instantly, sync as full idempotent snapshots, retry with backoff, and resume after reload or reconnect.
+
+## Collective stats ("Together" tab)
+With a club of three, the reveal rule above works per partner: you see each clubmate's review of an episode once you've both submitted it. Each clubmate also gets their own stats card (only episodes you both submitted).
+
+The **Together** page shows group averages, a per-member breakdown, favorite/worst episode, combined counters and the biggest disagreements (spread across everyone) for one season. A season **unlocks only when every member has submitted every episode of it** (and the club has at least two members); someone joining later relocks it until they catch up. The gate is `season_progress()` (counts only, never content) and `collective_stats()` refuses to run until it passes.

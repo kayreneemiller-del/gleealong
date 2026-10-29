@@ -44,7 +44,7 @@ button.link { background: none; border: 0; color: var(--brand-text); text-decora
 .page { max-width: 560px; margin: 0 auto; padding: calc(16px + var(--sat)) 16px calc(88px + var(--sab)); display: flex; flex-direction: column; gap: 12px; }
 .page h2 { margin: 0; }
 .muted { color: var(--muted); } .center { text-align: center; }
-.tabbar { position: fixed; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface); border-top: 1px solid var(--line); padding-bottom: var(--sab); z-index: 10; }
+.tabbar { position: fixed; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-top: 1px solid var(--line); padding-bottom: var(--sab); z-index: 10; }
 .tabbar a, .tabbar button { padding: 14px 4px; text-align: center; color: var(--muted); text-decoration: none; background: none; border: 0; font-weight: 600; font-size: .85rem; }
 .tabbar a.active { color: var(--brand-text); }
 .banner { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px; margin: 0; }
@@ -104,3 +104,10 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .counter-main:disabled, .pip:disabled { opacity: 1; cursor: default; }
 .pip:disabled:not(.on) { color: var(--ink); }
 .counter-main:disabled { color: var(--ink); }
+
+/* ---- collective stats ---- */
+progress { width: 100%; height: 14px; accent-color: var(--brand); }
+.members { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.members th, .members td { padding: 6px 4px; text-align: center; }
+.members tbody th { text-align: left; color: var(--brand-text); }
+.members thead th { color: var(--muted); font-size: .72rem; }

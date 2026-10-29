@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useSession } from '../lib/session'
 import { fetchDisagreements, fetchSeasonStats, type Disagreement, type PickedEpisode, type SeasonStats } from '../lib/stats'
 import { COUNTERS, OVERALL, SCALES } from '../lib/types'
@@ -32,26 +33,29 @@ function StatsCard({ title, stats, empty }: { title: string; stats: SeasonStats 
 }
 
 export default function StatsPage() {
-  const { session, partner } = useSession()
+  const { session, partners } = useSession()
   const uid = session!.user.id
   const [season, setSeason] = useState<number | null>(null)
   const [mine, setMine] = useState<SeasonStats | null>(null)
-  const [theirs, setTheirs] = useState<SeasonStats | null>(null)
-  const [dis, setDis] = useState<Disagreement[]>([])
+  const [theirs, setTheirs] = useState<Record<string, SeasonStats>>({})
+  const [dis, setDis] = useState<Record<string, Disagreement[]>>({})
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     setError(null)
     Promise.all([
       fetchSeasonStats(uid, season),
-      partner ? fetchSeasonStats(partner.id, season) : Promise.resolve(null),
-      partner ? fetchDisagreements(season) : Promise.resolve([]),
+      Promise.all(partners.map((p) => fetchSeasonStats(p.id, season))),
+      Promise.all(partners.map((p) => fetchDisagreements(p.id, season))),
     ])
-      .then(([m, t, d]) => { setMine(m); setTheirs(t); setDis(d) })
+      .then(([m, t, d]) => {
+        setMine(m)
+        setTheirs(Object.fromEntries(partners.map((p, i) => [p.id, t[i]])))
+        setDis(Object.fromEntries(partners.map((p, i) => [p.id, d[i]])))
+      })
       .catch((e) => setError((e as Error).message))
-  }, [uid, partner, season])
+  }, [uid, partners, season])
 
-  const name = partner?.display_name ?? 'Your partner'
   return (
     <main className="page">
       <h2>The numbers 📊</h2>
@@ -62,29 +66,39 @@ export default function StatsPage() {
       </div>
       {error && <p className="error">{error}</p>}
 
-      <StatsCard title="Your season" stats={mine} empty="Submit a review and your stats show up. Go forth and judge." />
-      <StatsCard
-        title={`${name}'s season`} stats={theirs}
-        empty={`Only episodes you BOTH submitted count here. Nothing in common yet. Get watching!`}
-      />
-      <p className="muted small">{name}'s numbers only include episodes you've both submitted, so nobody gets spoiled.</p>
+      <p className="muted small">
+        Want the whole club's numbers? <Link to="/together">Together 🎭</Link> unlocks a season once everyone has reviewed every episode.
+      </p>
 
-      <section className="card">
-        <h3>Biggest disagreements 🥊</h3>
-        {dis.length === 0 ? <p className="muted">No shared episodes yet. The feud is brewing.</p> : (
-          <ol className="dis">
-            {dis.map((d) => (
-              <li key={d.episode_id}>
-                <strong>S{d.season}E{d.episode} {d.title}</strong>
-                <span className="gap">avg gap {d.score.toFixed(2)}</span>
-                <span className="muted small">
-                  {AVG_ROWS.map((r) => `${r.label.split(' ')[0]} ${d.scales[r.key].mine} vs ${d.scales[r.key].theirs}`).join(' · ')}
-                </span>
-              </li>
-            ))}
-          </ol>
-        )}
-      </section>
+      <StatsCard title="Your season" stats={mine} empty="Submit a review and your stats show up. Go forth and judge." />
+      {partners.map((p) => (
+        <StatsCard
+          key={p.id} title={`${p.display_name}'s season`} stats={theirs[p.id] ?? null}
+          empty="Only episodes you BOTH submitted count here. Nothing in common yet. Get watching!"
+        />
+      ))}
+      {partners.length > 0 && (
+        <p className="muted small">Each clubmate's numbers only include episodes you've both submitted, so nobody gets spoiled.</p>
+      )}
+
+      {partners.map((p) => (
+        <section className="card" key={p.id}>
+          <h3>Biggest disagreements with {p.display_name} 🥊</h3>
+          {(dis[p.id] ?? []).length === 0 ? <p className="muted">No shared episodes yet. The feud is brewing.</p> : (
+            <ol className="dis">
+              {dis[p.id].map((d) => (
+                <li key={d.episode_id}>
+                  <strong>S{d.season}E{d.episode} {d.title}</strong>
+                  <span className="gap">avg gap {d.score.toFixed(2)}</span>
+                  <span className="muted small">
+                    {AVG_ROWS.map((r) => `${r.label.split(' ')[0]} ${d.scales[r.key].mine} vs ${d.scales[r.key].theirs}`).join(' · ')}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </section>
+      ))}
     </main>
   )
 }

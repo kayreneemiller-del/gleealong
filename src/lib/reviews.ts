@@ -14,6 +14,9 @@ export interface LoadedReview {
   content: ReviewContent
 }
 
+/** Everyone I can currently see for an episode, besides me. */
+export type PartnerReview = LoadedReview & { userId: string }
+
 interface RawReview extends ReviewRow {
   ratings: { scale: Scale; value: number }[]
   counters: { counter: CounterKey; count: number }[]
@@ -46,7 +49,8 @@ export async function fetchMyStatuses(uid: string): Promise<Map<number, 'draft' 
 }
 
 /**
- * Reviews of one episode that RLS lets me see: always mine; the partner's only after I've submitted mine.
+ * Reviews of one episode that RLS lets me see: always mine; each partner's only after I've submitted mine
+ * (and they've submitted theirs). Partners are independent: one may be revealed while another is not.
  * (No client-side filtering for the reveal rule; the server simply doesn't return what I may not see.)
  */
 export async function fetchEpisodeReviews(episodeId: number, uid: string) {
@@ -57,10 +61,12 @@ export async function fetchEpisodeReviews(episodeId: number, uid: string) {
   if (error) throw error
   const rows = (data ?? []) as unknown as RawReview[]
   const mine = rows.find((r) => r.user_id === uid)
-  const theirs = rows.find((r) => r.user_id !== uid)
+  const others = rows
+    .filter((r) => r.user_id !== uid)
+    .map((r) => ({ userId: r.user_id, row: r, content: toContent(r) }) satisfies PartnerReview)
   return {
     mine: mine ? ({ row: mine, content: toContent(mine) } satisfies LoadedReview) : null,
-    theirs: theirs ? ({ row: theirs, content: toContent(theirs) } satisfies LoadedReview) : null,
+    others,
   }
 }
 

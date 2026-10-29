@@ -6,6 +6,7 @@ import PairPage from './pages/PairPage'
 import HomePage from './pages/HomePage'
 import EpisodePage from './pages/EpisodePage'
 import StatsPage from './pages/StatsPage'
+import CollectivePage from './pages/CollectivePage'
 import Shell from './components/Shell'
 
 function Splash({ children }: { children: React.ReactNode }) {
@@ -33,6 +34,7 @@ export default function App() {
         <Route index element={<HomePage />} />
         <Route path="ep/:id" element={<EpisodePage />} />
         <Route path="stats" element={<StatsPage />} />
+        <Route path="together" element={<CollectivePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
