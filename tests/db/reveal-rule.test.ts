@@ -83,7 +83,7 @@ describe.skipIf(!url)('reveal rule: no leaks via direct API access', () => {
     expect(s.averages).toEqual({ sue_c: null, schue_cringe: null, rachel_extra: null, overall_gleeks: null })
     expect(s.favorite).toBeNull()
     expect(s.counters.brittana).toBe(0)
-    const d = await asUser(db, A, (q) => q('select * from biggest_disagreements(10)'))
+    const d = await asUser(db, A, (q) => q('select * from biggest_disagreements($1, 10)', [B]))
     expect(d.rowCount).toBe(0)
   })
 
@@ -128,14 +128,14 @@ describe.skipIf(!url)('reveal rule: no leaks via direct API access', () => {
   it("B's later submissions on non-mutual episodes don't change what A sees (no inference by differencing)", async () => {
     const before = await asUser(db, A, async (q) => ({
       s: (await q('select season_stats($1) s', [B])).rows[0].s,
-      d: (await q('select * from biggest_disagreements(10)')).rows,
+      d: (await q('select * from biggest_disagreements($1, 10)', [B])).rows,
       v: (await q('select * from review_scores')).rows.length,
     }))
     await submit(B, 4, review(1, 1, 1, 1, 'B-ep4', { schue_rap: 99 }))
     await submit(B, 5, review(5, 5, 5, 5, 'B-ep5', { schue_rap: 99 }))
     const after = await asUser(db, A, async (q) => ({
       s: (await q('select season_stats($1) s', [B])).rows[0].s,
-      d: (await q('select * from biggest_disagreements(10)')).rows,
+      d: (await q('select * from biggest_disagreements($1, 10)', [B])).rows,
       v: (await q('select * from review_scores')).rows.length,
     }))
     expect(after).toEqual(before)
@@ -143,12 +143,12 @@ describe.skipIf(!url)('reveal rule: no leaks via direct API access', () => {
 
   it('biggest disagreements: ranked, mutual-only', async () => {
     // Mutual: ep1 (A 3,1,2,5 vs B 5,5,5,5 -> diffs 2,4,3,0 => 2.25) and ep2? B only drafted ep2: not mutual.
-    const d = await asUser(db, A, async (q) => (await q('select * from biggest_disagreements(10)')).rows)
+    const d = await asUser(db, A, async (q) => (await q('select * from biggest_disagreements($1, 10)', [B])).rows)
     expect(d.map((r) => r.episode_id)).toEqual([1])
     expect(Number(d[0].score)).toBe(2.25)
     // Make ep2 mutual and far apart -> it should outrank ep1.
     await submit(B, 2, review(1, 1, 5, 1, 'B-ep2-final'))
-    const d2 = await asUser(db, A, async (q) => (await q('select * from biggest_disagreements(10)')).rows)
+    const d2 = await asUser(db, A, async (q) => (await q('select * from biggest_disagreements($1, 10)', [B])).rows)
     expect(d2.map((r) => r.episode_id)).toEqual([2, 1])
     expect(d2[0].scales.schue_cringe).toEqual({ mine: 4, theirs: 5 })
   })

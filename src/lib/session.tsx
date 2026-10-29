@@ -7,7 +7,8 @@ interface Ctx {
   session: Session | null
   loading: boolean
   me: Member | null
-  partner: Member | null
+  /** Everyone else in my club (0–2 people). */
+  partners: Member[]
   pair: Pair | null
   refresh: () => Promise<void>
   signOut: () => Promise<void>
@@ -19,19 +20,19 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
   const [me, setMe] = useState<Member | null>(null)
-  const [partner, setPartner] = useState<Member | null>(null)
+  const [partners, setPartners] = useState<Member[]>([])
   const [pair, setPair] = useState<Pair | null>(null)
 
   const loadProfile = useCallback(async (uid: string | null) => {
     if (!uid) {
-      setMe(null); setPartner(null); setPair(null)
+      setMe(null); setPartners([]); setPair(null)
       return
     }
-    // RLS returns my row plus my partner's row (if they've joined).
+    // RLS returns my row plus my clubmates' rows (whoever has joined).
     const { data: members } = await supabase.from('users').select('id, pair_id, display_name')
     const mine = members?.find((m) => m.id === uid) ?? null
     setMe(mine)
-    setPartner(members?.find((m) => m.id !== uid) ?? null)
+    setPartners((members ?? []).filter((m) => m.id !== uid).sort((a, b) => a.display_name.localeCompare(b.display_name)))
     if (mine) {
       const { data: p } = await supabase.from('pairs').select('id, invite_code').maybeSingle()
       setPair(p ?? null)
@@ -60,7 +61,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => { await supabase.auth.signOut() }, [])
 
   return (
-    <SessionCtx.Provider value={{ session, loading, me, partner, pair, refresh, signOut }}>
+    <SessionCtx.Provider value={{ session, loading, me, partners, pair, refresh, signOut }}>
       {children}
     </SessionCtx.Provider>
   )

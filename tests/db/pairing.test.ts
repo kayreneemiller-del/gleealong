@@ -4,11 +4,12 @@ import { asUser, expectError, freshDb, makeUser, url } from './helpers'
 
 describe.skipIf(!url)('pairing', () => {
   let c: pg.Client
-  let a: string, b: string, x: string
+  let a: string, b: string, g: string, x: string
   beforeAll(async () => {
     c = await freshDb('glee_pairing')
     a = await makeUser(c, 'a@example.com')
     b = await makeUser(c, 'b@example.com')
+    g = await makeUser(c, 'g@example.com')
     x = await makeUser(c, 'x@example.com')
   })
   afterAll(() => c.end())
@@ -18,11 +19,12 @@ describe.skipIf(!url)('pairing', () => {
     expect(r.rows[0]).toEqual({ n: 121, s: 6 })
   })
 
-  it('creates a pair, joins with a code (any casing/dashes), and caps at two', async () => {
+  it('creates a pair, joins with a code (any casing/dashes), and caps at three', async () => {
     const pair = await asUser(c, a, async (q) => (await q(`select * from create_pair('Alpha')`)).rows[0])
     expect(pair.invite_code).toMatch(/^[A-HJKMNP-Z2-9]{8}$/)
     const dashed = `${pair.invite_code.slice(0, 4)}-${pair.invite_code.slice(4)}`.toLowerCase()
     await asUser(c, b, (q) => q(`select * from join_pair($1, 'Beta')`, [dashed]))
+    await asUser(c, g, (q) => q(`select * from join_pair($1, 'Gamma')`, [pair.invite_code]))
     const msg = await expectError(c, x, `select * from join_pair($1, 'Xavier')`, [pair.invite_code])
     expect(msg).toMatch(/invite code did not work/)
   })
@@ -34,7 +36,7 @@ describe.skipIf(!url)('pairing', () => {
 
   it('members see each other; outsiders see nobody and no codes', async () => {
     const seenByA = await asUser(c, a, async (q) => (await q('select display_name from users order by 1')).rows)
-    expect(seenByA.map((r) => r.display_name)).toEqual(['Alpha', 'Beta'])
+    expect(seenByA.map((r) => r.display_name)).toEqual(['Alpha', 'Beta', 'Gamma'])
     const seenByX = await asUser(c, x, async (q) => ({
       users: (await q('select * from users')).rows,
       pairs: (await q('select * from pairs')).rows,

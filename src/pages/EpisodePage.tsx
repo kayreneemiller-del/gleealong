@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useSession } from '../lib/session'
 import { DraftSyncer, type SyncStatus } from '../lib/draftSync'
 import {
-  fetchEpisodeReviews, fetchEpisodes, isComplete, saveDraft, submitReview, type LoadedReview,
+  fetchEpisodeReviews, fetchEpisodes, isComplete, saveDraft, submitReview, type LoadedReview, type PartnerReview,
 } from '../lib/reviews'
 import { emptyContent, type Episode, type ReviewContent } from '../lib/types'
 import ReviewFields from '../components/ReviewFields'
@@ -17,17 +17,22 @@ const STATUS_COPY: Record<SyncStatus, string> = {
   error: 'Hmm, the server said no.',
 }
 
+const partnerNames = (names: string[]) =>
+  names.length === 0 ? 'Your clubmates'
+    : names.length === 1 ? names[0]
+    : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
+
 export default function EpisodePage() {
   const { id } = useParams()
   const episodeId = Number(id)
-  const { session, me, partner } = useSession()
+  const { session, me, partners } = useSession()
   const uid = session!.user.id
 
   const [episode, setEpisode] = useState<Episode | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [mine, setMine] = useState<LoadedReview | null>(null)
-  const [theirs, setTheirs] = useState<LoadedReview | null>(null)
+  const [others, setOthers] = useState<PartnerReview[]>([])
   const [content, setContent] = useState<ReviewContent>(emptyContent())
   const [status, setStatus] = useState<SyncStatus>('idle')
   const [statusDetail, setStatusDetail] = useState<string>()
@@ -51,7 +56,7 @@ export default function EpisodePage() {
     try {
       const [eps, rev] = await Promise.all([fetchEpisodes(), fetchEpisodeReviews(episodeId, uid)])
       setEpisode(eps.find((e) => e.id === episodeId) ?? null)
-      setMine(rev.mine); setTheirs(rev.theirs)
+      setMine(rev.mine); setOthers(rev.others)
       if (rev.mine?.row.status === 'submitted') {
         s.clear() // final on the server; any stale local copy is obsolete
         setContent(rev.mine.content)
@@ -94,7 +99,7 @@ export default function EpisodePage() {
     try {
       await submitReview(episodeId, content)
       syncer.current?.clear()
-      await load() // re-fetch: RLS now reveals the partner's review if they've submitted
+      await load() // re-fetch: RLS now reveals each partner's review they've submitted
     } catch (e) {
       setSubmitError((e as Error).message)
     } finally {
@@ -123,22 +128,28 @@ export default function EpisodePage() {
           <p className="banner ok-banner">Submitted! Your review is locked in. 🔒</p>
           <h3 className="who">{me?.display_name} (you)</h3>
           <ReviewFields content={content} />
-          {theirs ? (
-            <>
-              <hr />
-              <h3 className="who who-partner">{partner?.display_name} ✨ revealed</h3>
-              <ReviewFields content={theirs.content} />
-            </>
-          ) : (
-            <p className="banner">
-              Nothing from {partner?.display_name ?? 'your partner'} yet. Once they submit, their take shows up right here. 👀
-            </p>
+          {partners.length === 0 && (
+            <p className="banner">Nobody else is in the club yet. Share your invite code from the Episodes tab. 👀</p>
           )}
+          {partners.map((p) => {
+            const theirs = others.find((o) => o.userId === p.id)
+            return theirs ? (
+              <div key={p.id}>
+                <hr />
+                <h3 className="who who-partner">{p.display_name} ✨ revealed</h3>
+                <ReviewFields content={theirs.content} />
+              </div>
+            ) : (
+              <p key={p.id} className="banner">
+                Nothing from {p.display_name} yet. Once they submit, their take shows up right here. 👀
+              </p>
+            )
+          })}
         </>
       ) : (
         <>
           <p className="banner">
-            Drafts are private. {partner?.display_name ?? 'Your partner'} can't peek until you both submit.
+            Drafts are private. {partnerNames(partners.map((p) => p.display_name))} can't peek until you both submit.
           </p>
           <ReviewFields content={content} onChange={edit} />
           <div className={`sync sync-${status}`} role="status">

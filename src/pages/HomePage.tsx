@@ -8,7 +8,7 @@ const fmtCode = (c: string) => `${c.slice(0, 4)}-${c.slice(4)}`
 const LABEL = { none: 'Not started', draft: 'Watching 👀', submitted: 'Submitted ✓' } as const
 
 export default function HomePage() {
-  const { session, me, partner, pair } = useSession()
+  const { session, me, partners, pair } = useSession()
   const [season, setSeason] = useState(() => Number(sessionStorage.getItem('glee:season')) || 1)
   const [episodes, setEpisodes] = useState<Episode[]>([])
   const [statuses, setStatuses] = useState<Map<number, 'draft' | 'submitted'>>(new Map())
@@ -27,9 +27,9 @@ export default function HomePage() {
   return (
     <main className="page">
       <h2>Hi, {me?.display_name}! 🎶</h2>
-      {!partner && pair && (
+      {partners.length < 2 && pair && (
         <div className="banner invite-banner">
-          Waiting on your duet partner. Share code{' '}
+          {partners.length === 0 ? 'Waiting on your duet partner.' : 'Room for one more in the club.'} Share code{' '}
           <button className="code-chip small" onClick={() => navigator.clipboard?.writeText(fmtCode(pair.invite_code))}>
             {fmtCode(pair.invite_code)}
           </button>{' '}

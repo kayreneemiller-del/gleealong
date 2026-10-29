@@ -25,8 +25,8 @@ export default function PairPage() {
   return (
     <main className="card-page">
       <div className="logo">G</div>
-      <h1>Find your duet partner</h1>
-      <p className="tagline">Start a club and share the code, or join with the code you were handed.</p>
+      <h1>Find your Glee club</h1>
+      <p className="tagline">Start a club (up to three people) and share the code, or join with the code you were handed.</p>
 
       <div className="seg" role="tablist">
         <button role="tab" aria-selected={mode === 'create'} onClick={() => setMode('create')}>Start a club</button>

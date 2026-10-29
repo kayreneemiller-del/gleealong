@@ -9,6 +9,7 @@ export default function Shell() {
       <nav className="tabbar">
         <NavLink to="/" end>📺 Episodes</NavLink>
         <NavLink to="/stats">📊 Stats</NavLink>
+        <NavLink to="/together">🎭 Together</NavLink>
         <button onClick={() => void signOut()}>👋 Sign out</button>
       </nav>
     </>
